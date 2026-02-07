@@ -19,6 +19,11 @@ public class ItemService {
         return item;
     }
 
+    // ✅ ADD THIS METHOD
+    public List<Item> getAllItems() {
+        return itemList;
+    }
+
     public Optional<Item> getItemById(Long id) {
         return itemList.stream()
                 .filter(item -> item.getId().equals(id))

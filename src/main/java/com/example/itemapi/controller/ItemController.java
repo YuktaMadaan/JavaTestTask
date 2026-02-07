@@ -5,6 +5,8 @@ import com.example.itemapi.service.ItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/items")
 public class ItemController {
@@ -15,13 +17,22 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    // Root endpoint (optional)
+    @GetMapping("/")
+    public String home() {
+        return "Item API is Live on Render!";
+    }
+
     // Add new item
     @PostMapping
     public ResponseEntity<?> addItem(@RequestBody Item item) {
 
-        // Input Validation
         if (item.getName() == null || item.getName().isEmpty()) {
             return ResponseEntity.badRequest().body("Item name is required");
+        }
+
+        if (item.getDescription() == null || item.getDescription().isEmpty()) {
+            return ResponseEntity.badRequest().body("Description is required");
         }
 
         if (item.getPrice() <= 0) {
@@ -32,18 +43,18 @@ public class ItemController {
         return ResponseEntity.ok(savedItem);
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "Item API is running successfully!";
+    // Get all items
+    @GetMapping
+    public List<Item> getAllItems() {
+        return itemService.getAllItems();
     }
-
 
     // Get item by ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getItemById(@PathVariable Long id) {
 
         return itemService.getItemById(id)
-                .map(item -> ResponseEntity.ok(item))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 }
