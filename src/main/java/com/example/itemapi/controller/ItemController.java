@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/items")
+@CrossOrigin(origins = "*")  
 public class ItemController {
 
     private final ItemService itemService;
@@ -17,13 +18,11 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    // Root endpoint (optional)
     @GetMapping("/")
     public String home() {
         return "Item API is Live on Render!";
     }
 
-    // Add new item
     @PostMapping
     public ResponseEntity<?> addItem(@RequestBody Item item) {
 
@@ -43,13 +42,11 @@ public class ItemController {
         return ResponseEntity.ok(savedItem);
     }
 
-    // Get all items
     @GetMapping
     public List<Item> getAllItems() {
         return itemService.getAllItems();
     }
 
-    // Get item by ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getItemById(@PathVariable Long id) {
 
